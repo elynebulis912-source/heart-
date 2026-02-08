@@ -316,7 +316,7 @@ const LoveUniverse: React.FC<ThemeProps> = () => {
     // ═══ GIF/VIDEO SPRITES DYNAMIQUES INTÉGRÉS DANS L'UNIVERS 3D ═══
     const gifSprites: THREE.Sprite[] = [];
     const textureLoader = new THREE.TextureLoader();
-    const animatedGifData: Array<{ texture?: any; img: HTMLImageElement | null; canvas: HTMLCanvasElement; sprite: THREE.Sprite }> = [];
+    const animatedGifData: Array<{ texture?: any; img: HTMLImageElement | null; canvas: HTMLCanvasElement; sprite: THREE.Sprite; gifUpdate?: () => void }> = [];
 
     // Charge la liste de médias depuis public/Images/index.json
     fetch('/Images/index.json')
@@ -466,7 +466,7 @@ const LoveUniverse: React.FC<ThemeProps> = () => {
 
                   scene.add(sprite);
                   gifSprites.push(sprite);
-                  animatedGifData.push({ texture: tex as THREE.CanvasTexture, img: null, canvas, sprite });
+                  animatedGifData.push({ texture: tex as THREE.CanvasTexture, img: null, canvas, sprite, gifUpdate: update });
                 } catch (e) {
                   // fallback image static si erreur
                   const img = new Image();
@@ -586,7 +586,12 @@ const LoveUniverse: React.FC<ThemeProps> = () => {
 
           scene.add(sprite);
           gifSprites.push(sprite);
-          animatedGifData.push({ texture: tex as THREE.CanvasTexture, img, canvas, sprite });
+          // Ajout de gifUpdate si le sprite provient d'un GIF animé
+          if (sprite.userData && typeof sprite.userData.gifUpdate === 'function') {
+            animatedGifData.push({ texture: tex as THREE.CanvasTexture, img, canvas, sprite, gifUpdate: sprite.userData.gifUpdate });
+          } else {
+            animatedGifData.push({ texture: tex as THREE.CanvasTexture, img, canvas, sprite });
+          }
         } catch (e) {
           // ignore
         }
@@ -700,9 +705,21 @@ const LoveUniverse: React.FC<ThemeProps> = () => {
 
       // Update animated GIF canvas textures so       gi      git remote set-url origin git@github.com:elynebulis912-source/Dearest-love.gity actually animate
       if (animatedGifData.length > 0) {
+        // DEBUG: log animatedGifData pour vérifier le contenu
+        if (time < 0.1) {
+          console.log('animatedGifData:', animatedGifData);
+        }
         animatedGifData.forEach(item => {
-          // Correction : item.update n'existe pas, on ne l'appelle plus
-          if (item.texture) {
+          if (typeof (item as any).gifUpdate === 'function') {
+            // DEBUG: log à chaque appel
+            if (time < 0.1) {
+              console.log('Appel gifUpdate pour', item);
+            }
+            (item as any).gifUpdate();
+            if (item.texture) {
+              item.texture.needsUpdate = true;
+            }
+          } else if (item.texture) {
             item.texture.needsUpdate = true;
           } else if (item.img && item.canvas) {
             try {

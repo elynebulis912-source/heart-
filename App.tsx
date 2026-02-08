@@ -30,7 +30,7 @@ const App: React.FC = () => {
     { id: 2, src: '/A2.jpeg', top: '6%', left: '2%', size: '10rem', opacity: 0.8 },
     { id: 4, src: '/A4.jpeg', top: '2%', left: '45%', size: '7rem', opacity: 0.6 },
   ]);
-  
+
   const updatePhoto = (id: number, patch: Partial<{top:string; left:string; size:string; opacity:number}>) => {
     setPhotos(prev => prev.map(p => p.id === id ? { ...p, ...patch } : p));
   };
@@ -38,7 +38,7 @@ const App: React.FC = () => {
   const updateGif = (id: number, patch: Partial<{top:string; left:string; size:string; opacity:number}>) => {
     setGifs(prev => prev.map(g => g.id === id ? { ...g, ...patch } : g));
   };
-  
+
   // --- Contrôle Volume ---
   const [showVolume, setShowVolume] = useState(false);
   const [volume, setVolume] = useState(0.5);
@@ -191,7 +191,7 @@ const App: React.FC = () => {
     <div className="fixed top-1 right-3 z-[1100] flex flex-col items-end" onClick={(e) => e.stopPropagation()}>
       <div className={`flex items-center gap-2 backdrop-blur-3xl rounded-full p-1 border shadow-2xl transition-all duration-500 hover:scale-[1.02] ${theme === 'dark' ? 'bg-black/95 border-red-900' : 'bg-white/60 border-white/40'}`}> 
         {/* Player 1 */}
-        <div className={`w-8 h-8 rounded-full overflow-hidden border transition-transform ${theme === 'dark' ? 'border-red-600' : 'border-pink-200'}`}> 
+        <div className={`w-8 h-8 rounded-full overflow-hidden border transition-transform ${theme === 'dark' ? 'border-red-600' : 'border-pink-200'}`}>
            <img src="/gif9.gif" alt="Music" className={`w-full h-full object-cover`} />
         </div>
         <div className="flex flex-col pr-1 min-w-[95px]">
@@ -203,7 +203,7 @@ const App: React.FC = () => {
         </button>
 
         {/* Player 2 */}
-        <div className={`w-8 h-8 rounded-full overflow-hidden border transition-transform ${theme === 'dark' ? 'border-red-600' : 'border-pink-200'}`}> 
+        <div className={`w-8 h-8 rounded-full overflow-hidden border transition-transform ${theme === 'dark' ? 'border-red-600' : 'border-pink-200'}`}>
            <img src="/gif18.gif" alt="Music2" className={`w-full h-full object-cover`} />
         </div>
         <div className="flex flex-col pr-1 min-w-[95px]">
@@ -257,7 +257,7 @@ const App: React.FC = () => {
         <ThemeSwitcher />
         <GlobalSpotifyPlayer />
 
-        
+
         {/* Decorative elements dispersion */}
         <div className="absolute inset-0 z-0 pointer-events-none select-none overflow-hidden">
           {photos.map(p => (
@@ -280,11 +280,11 @@ const App: React.FC = () => {
           <div className="w-full max-w-lg pointer-events-auto relative">
             <div className={`relative p-4 md:p-6 rounded-2xl bg-transparent transition-all duration-1000`}>
         {/* GIF16 EN ABSOLUTE SUR LA PAGE ENTIÈRE, TOUT À GAUCHE */}
-        <img 
-          src="/gif16.gif" 
-          alt="gif16" 
-          className="w-30 md:w-60 h-auto absolute z-50" 
-          style={{ left: '-100%',top: '55%',opacity: 0.9, pointerEvents: 'none' }} 
+        <img
+          src="/gif16.gif"
+          alt="gif16"
+          className="w-30 md:w-60 h-auto absolute z-50"
+          style={{ left: '-100%',top: '55%',opacity: 0.9, pointerEvents: 'none' }}
         />
 
               <p style={{ fontFamily: "'Great Vibes', cursive" }} className="text-[#5d4037] text-2xl md:text-4xl mb-3 opacity-95">
@@ -311,24 +311,24 @@ const App: React.FC = () => {
                   <p style={{ fontFamily: "'Great Vibes', cursive" }} className="text-3xl md:text-4xl text-[#8b7355] opacity-80 m-0">
                     Eternally yours,
                   </p>
-                  <img 
-                    src="/gif15.gif" 
-                    alt="gif15" 
-                    className="w-40 md:w-40 h-auto absolute z-50" 
-                    style={{ top: '40%', left: 'auto', right: '100%', marginBottom: '-2px', pointerEvents: 'none' }} 
+                  <img
+                    src="/gif15.gif"
+                    alt="gif15"
+                    className="w-40 md:w-40 h-auto absolute z-50"
+                    style={{ top: '40%', left: 'auto', right: '100%', marginBottom: '-2px', pointerEvents: 'none' }}
                   />
-                
-                  
-                  
+
+
+
                 </div>
               </div>
-              
+
 
             </div>
           </div>
 
           {/* UI de configuration supprimée — gif placé directement sous le titre */}
-        
+
         </div>
       </div>
     );
