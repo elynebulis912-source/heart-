@@ -17,6 +17,16 @@ export default defineConfig(({ mode }) => {
         outDir: 'dist',
         sourcemap: false,
         minify: 'terser',
+        chunkSizeWarningLimit: 1000, // Passe la limite à 1 Mo
+        rollupOptions: {
+          output: {
+            manualChunks(id) {
+              if (id.includes('node_modules')) {
+                return id.toString().split('node_modules/')[1].split('/')[0].toString();
+              }
+            }
+          }
+        }
       },
       plugins: [react()],
       define: {

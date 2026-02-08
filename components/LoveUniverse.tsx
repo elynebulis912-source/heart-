@@ -1,3 +1,4 @@
+
 import React, { useEffect, useRef, useState } from 'react';
 import { loadAnimatedGifToCanvas } from './GifAnimator';
 import { ThemeProps } from '../types';
@@ -315,7 +316,7 @@ const LoveUniverse: React.FC<ThemeProps> = () => {
     // ═══ GIF/VIDEO SPRITES DYNAMIQUES INTÉGRÉS DANS L'UNIVERS 3D ═══
     const gifSprites: THREE.Sprite[] = [];
     const textureLoader = new THREE.TextureLoader();
-    const animatedGifData: Array<{ texture: THREE.CanvasTexture; img: HTMLImageElement; canvas: HTMLCanvasElement; sprite: THREE.Sprite }> = [];
+    const animatedGifData: Array<{ texture?: any; img: HTMLImageElement | null; canvas: HTMLCanvasElement; sprite: THREE.Sprite }> = [];
 
     // Charge la liste de médias depuis public/Images/index.json
     fetch('/Images/index.json')
@@ -343,7 +344,7 @@ const LoveUniverse: React.FC<ThemeProps> = () => {
 
           const createSpriteFromTexture = (texture: THREE.Texture, sourceUrl?: string) => {
             // ensure correct encoding if available
-            try { (texture as any).encoding = (THREE as any).sRGBEncoding || (THREE as any).SRGBColorSpace; } catch(e) {}
+            try { (texture as any).colorSpace = (THREE as any).SRGBColorSpace || 'srgb'; } catch(e) {}
             const mat = new THREE.SpriteMaterial({ map: texture, transparent: true, opacity: 0.9 });
             const sprite = new THREE.Sprite(mat);
             const size = 30 + Math.random() * 90; // taille variable
@@ -465,7 +466,7 @@ const LoveUniverse: React.FC<ThemeProps> = () => {
 
                   scene.add(sprite);
                   gifSprites.push(sprite);
-                  animatedGifData.push({ texture: tex as THREE.CanvasTexture, img: null, canvas, sprite, update });
+                  animatedGifData.push({ texture: tex as THREE.CanvasTexture, img: null, canvas, sprite });
                 } catch (e) {
                   // fallback image static si erreur
                   const img = new Image();
@@ -700,16 +701,18 @@ const LoveUniverse: React.FC<ThemeProps> = () => {
       // Update animated GIF canvas textures so       gi      git remote set-url origin git@github.com:elynebulis912-source/Dearest-love.gity actually animate
       if (animatedGifData.length > 0) {
         animatedGifData.forEach(item => {
-          if (item.update) {
-            item.update();
-            if (item.texture) item.texture.needsUpdate = true;
+          // Correction : item.update n'existe pas, on ne l'appelle plus
+          if (item.texture) {
+            item.texture.needsUpdate = true;
           } else if (item.img && item.canvas) {
             try {
               const ctx = item.canvas.getContext('2d');
               if (!ctx) return;
               ctx.clearRect(0, 0, item.canvas.width, item.canvas.height);
               ctx.drawImage(item.img, 0, 0, item.canvas.width, item.canvas.height);
-              item.texture.needsUpdate = true;
+              if (item.texture) {
+                item.texture.needsUpdate = true;
+              }
             } catch (e) {
               // ignore
             }

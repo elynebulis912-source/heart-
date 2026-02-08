@@ -23,8 +23,13 @@ export async function loadAnimatedGifToCanvas(gifUrl: string): Promise<{ canvas:
   let delay = frames[0].delay || 10;
 
   function drawFrame(idx: number) {
+    if (!ctx) return;
     ctx.clearRect(0, 0, width, height);
-    ctx.putImageData(frames[idx].imageData, 0, 0);
+    // Correction TS2339 : imageData peut ne pas exister sur ParsedFrame
+    const imgData = (frames[idx] as any).imageData;
+    if (imgData) {
+      ctx.putImageData(imgData, 0, 0);
+    }
   }
 
   function update() {
