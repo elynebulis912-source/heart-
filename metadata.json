@@ -1,7 +1,0 @@
-{
-  "name": " Baby to Daddy",
-  "description": "Une expérience immersive de Saint-Valentin.",
-  "requestFramePermissions": [
-    "geolocation"
-  ]
-}
